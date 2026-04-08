@@ -38,7 +38,8 @@ public class NameGeneratorService {
                 firstName,
                 secondName,
                 titleName,
-                fullName
+                fullName,
+                null
         );
     }
 

@@ -4,6 +4,7 @@ public record RandomNameResponseDTO(
         String firstName,
         String secondName,
         String titleName,
-        String fullName
+        String fullName,
+        String imageUrl
 ) {
 }
