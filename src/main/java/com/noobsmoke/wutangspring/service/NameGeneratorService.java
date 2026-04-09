@@ -2,6 +2,7 @@ package com.noobsmoke.wutangspring.service;
 
 import com.noobsmoke.wutangspring.dto.NameInputRequest;
 import com.noobsmoke.wutangspring.dto.RandomNameResponseDTO;
+import com.noobsmoke.wutangspring.exception.InputNotCorrectException;
 import com.noobsmoke.wutangspring.model.Gender;
 import com.noobsmoke.wutangspring.repository.NameRepo;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ public class NameGeneratorService {
     public RandomNameResponseDTO generateNewName(NameInputRequest nameInputRequest) {
         Gender gender = nameInputRequest.gender();
         if ((gender != Gender.F && gender != Gender.M)) {
-            throw new IllegalArgumentException("Incorrect Gender");
+            throw new InputNotCorrectException("gender", gender.name(), "Gender Input Incorrect");
         }
         int nameSize = nameRepo.getNameSize();
         int titleSize = nameRepo.getTitleNameSize();
