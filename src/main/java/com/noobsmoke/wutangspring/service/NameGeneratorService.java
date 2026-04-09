@@ -2,6 +2,7 @@ package com.noobsmoke.wutangspring.service;
 
 import com.noobsmoke.wutangspring.dto.NameInputRequest;
 import com.noobsmoke.wutangspring.dto.RandomNameResponseDTO;
+import com.noobsmoke.wutangspring.model.Gender;
 import com.noobsmoke.wutangspring.repository.NameRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,12 +18,18 @@ public class NameGeneratorService {
 
 
     public RandomNameResponseDTO generateNewName(NameInputRequest nameInputRequest) {
+        Gender gender = nameInputRequest.gender();
+        if ((gender != Gender.F && gender != Gender.M)) {
+            throw new IllegalArgumentException("Incorrect Gender");
+        }
         int nameSize = nameRepo.getNameSize();
         int titleSize = nameRepo.getTitleNameSize();
+        int imageSize = nameRepo.getImageListSize(nameInputRequest.gender());
 
         int randomFirstIndex = getRandomIndex(nameSize);
         int randomSecondIndex;
         int randomThirdIndex = getRandomIndex(titleSize);
+        int randomFourthIndex = getRandomIndex(imageSize);
 
 
         do {
@@ -32,6 +39,7 @@ public class NameGeneratorService {
         String firstName = nameRepo.getNameByIndex(randomFirstIndex);
         String secondName = nameRepo.getNameByIndex(randomSecondIndex);
         String titleName = nameRepo.getTitleByIndex(randomThirdIndex);
+        String imageUrl = nameRepo.getImageByGender(randomFourthIndex, nameInputRequest.gender());
         String fullName = String.join(" ", firstName, secondName, titleName);
 
         return new RandomNameResponseDTO(
@@ -39,7 +47,7 @@ public class NameGeneratorService {
                 secondName,
                 titleName,
                 fullName,
-                null
+                imageUrl
         );
     }
 
